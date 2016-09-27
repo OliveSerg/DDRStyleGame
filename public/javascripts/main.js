@@ -14,4 +14,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
   joinButton.addEventListener('click', function(event){
     joinRoom.style.visibility = 'visible'
   })
+
+  document.getElementById('join').addEventListener('click', function(event){
+    event.preventDefault()
+    var roomId = document.getElementById('room-id').value
+    if(roomId == ''){
+      alert('Not a value')
+    } else {
+      window.location.replace(`${window.location.href + roomId}`)
+    }
+  })
+
 });
