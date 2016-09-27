@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   var createRoom = document.getElementById('create-room')
+  var joinButton = document.getElementById('join-button')
   var joinRoom = document.getElementById('join-room')
+  joinRoom.style.visibility = 'hidden'
 
   createRoom.addEventListener('click', function(event){
     function generateUID() {
@@ -9,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     window.location.replace(`${window.location.href + generateUID()}`)
   })
 
-  joinRoom.addEventListener('click', function(event){
-
+  joinButton.addEventListener('click', function(event){
+    joinRoom.style.visibility = 'visible'
   })
 });

@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
   div(
     id='button-container'
   )
@@ -10,5 +11,19 @@ block content
     ) Create Room
     button(
       type='button'
-      id='join-room'
+      id='join-button'
     ) Join Room
+
+  div(
+    id='join-room'
+  )
+    form(
+      class='join-form'
+    )
+      input(
+        type='text'
+        placeholder='Room Id'
+      )
+      button(
+        type='submit'
+      ) Join
