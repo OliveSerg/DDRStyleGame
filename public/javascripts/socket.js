@@ -8,3 +8,7 @@ socket.on('connect', function(){
 socket.on('socket', function(socket){
   console.log(socket);
 })
+
+socket.on('begin', function(data){
+  console.log('Begin');
+})

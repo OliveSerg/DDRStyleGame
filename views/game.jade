@@ -1,4 +1,9 @@
 extends layout
 
+block gameHeader
+  script(type='text/javascript', src='/javascripts/socket.js')
+  script(type='text/javascript', src='/javascripts/game.js')
 block content
-  
+  p(
+    id='room-id'
+  )
