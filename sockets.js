@@ -1,6 +1,11 @@
 module.exports = function(io){
   io.on('connection', function(socket){
-    console.log('works')
+
+    socket.on('room', function(room){
+      socket.join(room)
+    })
+
     socket.on('disconnect', function(){ });
+
   });
 }

@@ -4,12 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var io = require('socket.io')();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-var io = require('socket.io')();
+
+//Socket.io connections
 app.io = io;
 var socketFunction = require('./sockets.js')
 socketFunction(io)
