@@ -8,11 +8,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function generateUID() {
       return ((Math.random()*Math.pow(36,4) << 0).toString(36))
     }
-    window.location.replace(`${window.location.href + generateUID()}`)
+    window.location.replace(`${window.location.href}game/${generateUID()}`)
   })
 
   joinButton.addEventListener('click', function(event){
-    joinRoom.style.visibility = 'visible'
+    if(joinRoom.style.visibility == 'visible'){
+      joinRoom.style.visibility = 'hidden'
+    } else {
+      joinRoom.style.visibility = 'visible'
+    }
   })
 
   document.getElementById('join').addEventListener('click', function(event){
@@ -21,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if(roomId == ''){
       alert('Not a value')
     } else {
-      window.location.replace(`${window.location.href + roomId}`)
+      window.location.replace(`${window.location.href}game/${roomId}`)
     }
   })
 

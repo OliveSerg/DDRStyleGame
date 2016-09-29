@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET game page */
-router.get('/:roomId', function(req, res, next){
+router.get('/game/:roomId', function(req, res, next){
   res.render('game')
 })
 
