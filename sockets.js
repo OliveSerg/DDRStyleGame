@@ -2,7 +2,6 @@ module.exports = function(io){
 
   io.on('connection', function(socket){
     console.log('connected');
-    // console.log(socket.handshake)
 
     socket.on('room', function(room){
       if(socket.room){
@@ -10,9 +9,12 @@ module.exports = function(io){
       }
       socket.join(room, function(err){
         socket.handshake.accepted = false
+        socket.handshake.correctAnswers = 0
       })
       if (io.sockets.adapter.rooms[room].length == 2) {
         io.sockets.adapter.rooms[room].accepted = 0
+        io.sockets.adapter.rooms[room].answer = ""
+        console.log(io.sockets.adapter.rooms[room]);
         io.to(room).emit('begin')
       }
     })
@@ -23,7 +25,7 @@ module.exports = function(io){
         io.sockets.adapter.rooms[room].accepted++
       }
       if(io.sockets.adapter.rooms[room].accepted == 2){
-        console.log('start');
+        io.to(room).emit('start', outputData())
       }
     })
 
@@ -36,4 +38,12 @@ module.exports = function(io){
     });
 
   });
+
+  function outputData() {
+    var data = {}
+    var key = ['up','down','left','right']
+    data.key = key[Math.floor(Math.random() * key.length)]
+    return data
+  }
+
 }
