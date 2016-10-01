@@ -1,7 +1,9 @@
 module.exports = function(io){
+  var totalUsers = 0
 
   io.on('connection', function(socket){
-    console.log('connected');
+    totalUsers++
+    console.log(`User connected. Total Playing: ${totalUsers}`);
 
     socket.on('room', function(room){
       if(socket.room){
@@ -9,12 +11,21 @@ module.exports = function(io){
       }
       socket.join(room, function(err){
         socket.handshake.accepted = false
-        socket.handshake.correctAnswers = 0
+        // io.sockets.adapter.rooms[room].users = io.sockets.adapter.rooms[room].users.push({correctAnswers: 0, id: socket.id}) || [{correctAnswers: 0, id: socket.id}]
+        if (io.sockets.adapter.rooms[room].users) {
+          io.sockets.adapter.rooms[room].users.push({
+            correctAnswers: 0,
+            id: socket.id
+          })
+        } else {
+          io.sockets.adapter.rooms[room].users = [{
+            correctAnswers: 0,
+            id: socket.id
+          }]
+        }
       })
       if (io.sockets.adapter.rooms[room].length == 2) {
         io.sockets.adapter.rooms[room].accepted = 0
-        io.sockets.adapter.rooms[room].answer = ""
-        console.log(io.sockets.adapter.rooms[room]);
         io.to(room).emit('begin')
       }
     })
@@ -29,12 +40,24 @@ module.exports = function(io){
       }
     })
 
-    socket.on('keypress', function(key){
-
+    socket.on('correct', function(data){
+      var users = io.sockets.adapter.rooms[data].users
+      for(var i = 0; i < users.length; i++){
+        if (users[i].id == socket.id){
+          users[i].correctAnswers++
+          if (users[i].correctAnswers == 10) {
+            io.to(users[i].id).emit('winner')
+            io.to(users[i+1].id).emit('loser')
+          } else {
+            io.to(data).emit('question', outputData())
+          }
+        }
+      }
     })
 
     socket.on('disconnect', function(){
-      console.log('disconnected');
+      totalUsers--
+      console.log(`User disconnected. Total Playing: ${totalUsers}`);
     });
 
   });

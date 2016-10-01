@@ -1,7 +1,7 @@
 var socket = io.connect('http://localhost:3000')
 var room = window.location.pathname.replace('/game/', '')
 var start = false
-var gameDiv, answer;
+var gameDiv, answer, response;
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
@@ -17,8 +17,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   document.addEventListener('keydown', function(ev){
+    switch (ev.keyCode) {
+      case 40:
+      case 83:
+        response = 'down'
+        break;
+      case 38:
+      case 87:
+        response = 'up'
+        break;
+      case 37:
+      case 65:
+        response = 'left'
+        break;
+      case 39:
+      case 68:
+        response = 'right'
+        break;
+      default:
+    }
     if (start) {
-
+      if (response == answer) {
+        socket.emit('correct', room)
+      } else {
+        console.log('NOPE');
+      }
     }
   }, false)
 
@@ -33,16 +56,28 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   socket.on('start', function(data){
-    start = true
     var timer = 3;
     var interval = setInterval(function(){
       gameDiv.innerHTML = `${timer}`
       if (timer == 0) {
+        start = true
         displayOutput(data.key)
         clearInterval(interval)
       }
       timer--
     }, 1000)
+  })
+
+  socket.on('question', function(data){
+    displayOutput(data.key)
+  })
+
+  socket.on('winner', function(data){
+    console.log('you win')
+  })
+
+  socket.on('loser', function(data){
+    console.log('you lose')
   })
 
   function displayOutput(direction){
