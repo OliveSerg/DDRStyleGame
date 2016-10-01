@@ -2,6 +2,7 @@ var socket = io.connect('http://localhost:3000')
 var room = window.location.pathname.replace('/game/', '')
 var start = false
 var gameDiv, answer, response;
+var gameTimer = 30
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
@@ -56,20 +57,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   socket.on('start', function(data){
-    var timer = 3;
-    var interval = setInterval(function(){
-      gameDiv.innerHTML = `${timer}`
-      if (timer == 0) {
+    var startTimer = 3;
+    var startInterval = setInterval(function(){
+      gameDiv.innerHTML = `${startTimer}`
+      if (startTimer == 0) {
         start = true
-        displayOutput(data.key)
-        clearInterval(interval)
+        begin.style.visibility = 'hidden'
+        displayDirection(data.key)
+        clearInterval(startInterval)
+        startGameTimer()
       }
-      timer--
+      startTimer--
     }, 1000)
   })
 
   socket.on('question', function(data){
-    displayOutput(data.key)
+    displayDirection(data.key)
+    // displayScore(data.score)
   })
 
   socket.on('winner', function(data){
@@ -80,9 +84,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log('you lose')
   })
 
-  function displayOutput(direction){
+  function displayDirection(direction){
     gameDiv.innerHTML = ""
     gameDiv.innerHTML = direction
     answer = direction
+  }
+
+  function displayScore(score){
+
+  }
+
+  function startGameTimer(){
+    var gameInterval;
+    gameInterval = setInterval(function(){
+      roomId.innerHTML = `${gameTimer}`
+      if (gameTimer == 0) {
+        start = false
+        clearInterval(gameInterval)
+      }
+      gameTimer--
+    }, 1000)
   }
 })

@@ -11,15 +11,15 @@ module.exports = function(io){
       }
       socket.join(room, function(err){
         socket.handshake.accepted = false
-        // io.sockets.adapter.rooms[room].users = io.sockets.adapter.rooms[room].users.push({correctAnswers: 0, id: socket.id}) || [{correctAnswers: 0, id: socket.id}]
+        // io.sockets.adapter.rooms[room].users = io.sockets.adapter.rooms[room].users.push({correctAnswers: 0, id: socket.id}) || [{points: 0, id: socket.id}]
         if (io.sockets.adapter.rooms[room].users) {
           io.sockets.adapter.rooms[room].users.push({
-            correctAnswers: 0,
+            points: 0,
             id: socket.id
           })
         } else {
           io.sockets.adapter.rooms[room].users = [{
-            correctAnswers: 0,
+            points: 0,
             id: socket.id
           }]
         }
@@ -40,19 +40,25 @@ module.exports = function(io){
       }
     })
 
-    socket.on('correct', function(data){
-      var users = io.sockets.adapter.rooms[data].users
-      for(var i = 0; i < users.length; i++){
-        if (users[i].id == socket.id){
-          users[i].correctAnswers++
-          if (users[i].correctAnswers == 10) {
-            io.to(users[i].id).emit('winner')
-            io.to(users[i+1].id).emit('loser')
-          } else {
-            io.to(data).emit('question', outputData())
-          }
+    socket.on('correct', function(room){
+       io.sockets.adapter.rooms[room].users.forEach(function(user){
+        if (user.id == socket.id) {
+          user.points += 100
+          io.to(socket.id).emit('question', outputData())
         }
-      }
+      })
+      // var users = io.sockets.adapter.rooms[data].users
+      // for(var i = 0; i < users.length; i++){
+      //   if (users[i].id == socket.id){
+      //     users[i].correctAnswers++
+      //     if (users[i].correctAnswers == 10) {
+      //       io.to(users[i].id).emit('winner')
+      //       io.to(users[i+1].id).emit('loser')
+      //     } else {
+      //       io.to(data).emit('question', outputData())
+      //     }
+      //   }
+      // }
     })
 
     socket.on('disconnect', function(){
@@ -68,5 +74,4 @@ module.exports = function(io){
     data.key = key[Math.floor(Math.random() * key.length)]
     return data
   }
-
 }
