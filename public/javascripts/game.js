@@ -75,8 +75,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   socket.on('question', function(data){
-    
-    displayDirection(data.key)
+    if (socket.id == data.sender) {
+      displayDirection(data.key)
+    }
     updateScore(data.users)
   })
 
@@ -98,13 +99,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     usersArray.forEach(function(user){
       var userItem = document.createElement('p')
       userItem.id = user.id
-      var userText = document.createTextNode(`${user.id}: ${user.points}`)
+      var userText = document.createTextNode(`${user.id.replace('/#',"")}: ${user.points}`)
       userItem.appendChild(userText)
       score.appendChild(userItem)
     })
   }
   function updateScore(usersArray){
-    usersArray.forEach
+    usersArray.forEach(function(user){
+      var userItem = document.getElementById(user.id)
+      userItem.innerHTML = `${user.id.replace('/#',"")}: ${user.points}`
+    })
   }
 
   function startGameTimer(){

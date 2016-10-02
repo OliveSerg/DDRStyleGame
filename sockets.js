@@ -43,11 +43,13 @@ module.exports = function(io){
     })
 
     socket.on('correct', function(room){
-       io.sockets.adapter.rooms[room].users.forEach(function(user){
+       var users = io.sockets.adapter.rooms[room].users
+       users.forEach(function(user){
         if (user.id == socket.id) {
           user.points += 100
           var data = direction()
           data.users = users
+          data.sender = socket.id.replace("/#","")
           io.to(room).emit('question', data)
         }
       })
