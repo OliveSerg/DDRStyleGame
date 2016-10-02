@@ -23,11 +23,13 @@ module.exports = function(io){
             id: socket.id
           }]
         }
+        if (io.sockets.adapter.rooms[room].length == 2) {
+          io.sockets.adapter.rooms[room].accepted = 0
+          var users = io.sockets.adapter.rooms[room].users
+          console.log(users);
+          io.to(room).emit('begin', users)
+        }
       })
-      if (io.sockets.adapter.rooms[room].length == 2) {
-        io.sockets.adapter.rooms[room].accepted = 0
-        io.to(room).emit('begin')
-      }
     })
 
     socket.on('start', function(room){
@@ -36,7 +38,7 @@ module.exports = function(io){
         io.sockets.adapter.rooms[room].accepted++
       }
       if(io.sockets.adapter.rooms[room].accepted == 2){
-        io.to(room).emit('start', outputData())
+        io.to(room).emit('start', direction())
       }
     })
 
@@ -44,7 +46,9 @@ module.exports = function(io){
        io.sockets.adapter.rooms[room].users.forEach(function(user){
         if (user.id == socket.id) {
           user.points += 100
-          io.to(socket.id).emit('question', outputData())
+          var data = direction()
+          data.users = users
+          io.to(room).emit('question', data)
         }
       })
       // var users = io.sockets.adapter.rooms[data].users
@@ -55,7 +59,7 @@ module.exports = function(io){
       //       io.to(users[i].id).emit('winner')
       //       io.to(users[i+1].id).emit('loser')
       //     } else {
-      //       io.to(data).emit('question', outputData())
+      //       io.to(data).emit('question', direction())
       //     }
       //   }
       // }
@@ -68,7 +72,7 @@ module.exports = function(io){
 
   });
 
-  function outputData() {
+  function direction() {
     var data = {}
     var key = ['up','down','left','right']
     data.key = key[Math.floor(Math.random() * key.length)]

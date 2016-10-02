@@ -1,11 +1,13 @@
 var socket = io.connect('http://localhost:3000')
 var room = window.location.pathname.replace('/game/', '')
 var start = false
-var gameDiv, answer, response;
+var answer, response;
 var gameTimer = 30
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
+  var score = document.getElementById('score')
+  var $gameTimer = document.getElementById('timer')
   var roomId = document.getElementById('room-id')
   roomId.innerHTML = `Your Room Id is ${room}`
 
@@ -50,8 +52,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     socket.emit('room', room)
   })
 
-  socket.on('begin', function(data){
+  socket.on('begin', function(users){
     document.getElementById('waiting').style.visibility = 'hidden'
+    displayScore(users)
     var begin = document.getElementById('begin')
     begin.style.visibility = 'visible'
   })
@@ -64,16 +67,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         start = true
         begin.style.visibility = 'hidden'
         displayDirection(data.key)
-        clearInterval(startInterval)
         startGameTimer()
+        clearInterval(startInterval)
       }
       startTimer--
     }, 1000)
   })
 
   socket.on('question', function(data){
+    
     displayDirection(data.key)
-    // displayScore(data.score)
+    updateScore(data.users)
   })
 
   socket.on('winner', function(data){
@@ -90,14 +94,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
     answer = direction
   }
 
-  function displayScore(score){
-
+  function displayScore(usersArray){
+    usersArray.forEach(function(user){
+      var userItem = document.createElement('p')
+      userItem.id = user.id
+      var userText = document.createTextNode(`${user.id}: ${user.points}`)
+      userItem.appendChild(userText)
+      score.appendChild(userItem)
+    })
+  }
+  function updateScore(usersArray){
+    usersArray.forEach
   }
 
   function startGameTimer(){
     var gameInterval;
     gameInterval = setInterval(function(){
-      roomId.innerHTML = `${gameTimer}`
+      $gameTimer.innerHTML = `${gameTimer}`
       if (gameTimer == 0) {
         start = false
         clearInterval(gameInterval)
