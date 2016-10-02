@@ -26,7 +26,6 @@ module.exports = function(io){
         if (io.sockets.adapter.rooms[room].length == 2) {
           io.sockets.adapter.rooms[room].accepted = 0
           var users = io.sockets.adapter.rooms[room].users
-          console.log(users);
           io.to(room).emit('begin', users)
         }
       })
@@ -53,18 +52,14 @@ module.exports = function(io){
           io.to(room).emit('question', data)
         }
       })
-      // var users = io.sockets.adapter.rooms[data].users
-      // for(var i = 0; i < users.length; i++){
-      //   if (users[i].id == socket.id){
-      //     users[i].correctAnswers++
-      //     if (users[i].correctAnswers == 10) {
-      //       io.to(users[i].id).emit('winner')
-      //       io.to(users[i+1].id).emit('loser')
-      //     } else {
-      //       io.to(data).emit('question', direction())
-      //     }
-      //   }
-      // }
+    })
+
+    socket.on('end', function(room){
+      io.sockets.adapter.rooms[room].accepted--
+      if (io.sockets.adapter.rooms[room].accepted == 0) {
+        var winner = checkWinner(io.sockets.adapter.rooms[room].users)
+        io.to(room).emit('results', winner)
+      }
     })
 
     socket.on('disconnect', function(){
@@ -79,5 +74,19 @@ module.exports = function(io){
     var key = ['up','down','left','right']
     data.key = key[Math.floor(Math.random() * key.length)]
     return data
+  }
+
+  function checkWinner(users){
+    var winner = {
+      id: users[0].id,
+      points: users[0].points
+    }
+    for (var i = 0; i < users.length; i++) {
+      if (winner.points < users[i].points) {
+        winner.id = users[i].id
+        winner.points = users[i].points
+      }
+    }
+    return winner
   }
 }

@@ -66,8 +66,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
       if (startTimer == 0) {
         start = true
         begin.style.visibility = 'hidden'
-        displayDirection(data.key)
         startGameTimer()
+        displayDirection(data.key)
         clearInterval(startInterval)
       }
       startTimer--
@@ -81,12 +81,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     updateScore(data.users)
   })
 
-  socket.on('winner', function(data){
-    console.log('you win')
-  })
-
-  socket.on('loser', function(data){
-    console.log('you lose')
+  socket.on('results', function(data){
+    console.log(data);
+    console.log(socket.id);
+    if(data.id.replace('/#',"") == socket.id){
+      winner()
+    }else {
+      loser()
+    }
   })
 
   function displayDirection(direction){
@@ -99,7 +101,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     usersArray.forEach(function(user){
       var userItem = document.createElement('p')
       userItem.id = user.id
-      var userText = document.createTextNode(`${user.id.replace('/#',"")}: ${user.points}`)
+      var userText = document.createTextNode(
+        `${user.id.replace('/#',"")}: ${user.points}`
+      )
       userItem.appendChild(userText)
       score.appendChild(userItem)
     })
@@ -117,9 +121,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
       $gameTimer.innerHTML = `${gameTimer}`
       if (gameTimer == 0) {
         start = false
+        socket.emit('end', room)
         clearInterval(gameInterval)
       }
       gameTimer--
     }, 1000)
+  }
+
+  function winner(){
+    console.log('winner')
+  }
+
+  function loser(){
+    console.log('loser')
   }
 })
