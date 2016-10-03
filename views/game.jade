@@ -1,6 +1,7 @@
 extends layout
 
 block gameHeader
+  link(rel='stylesheet', href='/stylesheets/game_page.css')
   script(type='text/javascript', src='/javascripts/game.js')
 block content
   p(
@@ -10,21 +11,56 @@ block content
     id='waiting'
   ) Wating on Another User
   div(
-    id='begin'
+    class='row container'
   )
-    button(
-      id='begin-button'
-      type='button'
-    ) START!
-  div(
-    id='score'
-  )
-  div(
-    id='game-container'
-  )
-    p(
-      id='timer'
+    div(
+      class="col s3"
+      id='score'
     )
     div(
-      id='game'
+      class='col s9'
+      id='game-container'
     )
+      button(
+      id='begin-button'
+      type='button'
+      ) START!
+      p(
+        id='timer'
+      )
+      div(
+        id='game'
+        class='row'
+      )
+        button(
+          id='up'
+          class='direction col s3 offset-s5'
+        )
+          img(
+            src='/images/UpOFF.png'
+          )
+        button(
+          id='left'
+          class='direction col s3 offset-s2'
+        )
+          img(
+            src='/images/LeftOFF.png'
+          )
+        div(
+          id='direction'
+          class='direction col s3'
+        )
+        button(
+            id='right'
+            class='direction col s3'
+        )
+          img(
+            src='/images/RightOFF.png'
+          )
+        button(
+          id='down'
+          class='direction col s3 offset-s5'
+        )
+          img(
+          src='/images/DownOFF.png'
+          )

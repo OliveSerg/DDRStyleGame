@@ -9,14 +9,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var score = document.getElementById('score')
   var $gameTimer = document.getElementById('timer')
   var roomId = document.getElementById('room-id')
-  roomId.innerHTML = `Your Room Id is ${room}`
+  var begin = document.getElementById('begin-button')
 
-  var begin = document.getElementById('begin')
+  roomId.innerHTML = `Your Room Id is ${room}`
   begin.style.visibility = 'hidden'
+  // gameDiv.style.visibility = 'hidden'
 
   document.getElementById('begin-button').addEventListener('click', function(ev){
     ev.preventDefault()
     socket.emit('start', room)
+    begin.style.visibility = 'hidden'
   })
 
   document.addEventListener('keydown', function(ev){
@@ -55,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   socket.on('begin', function(users){
     document.getElementById('waiting').style.visibility = 'hidden'
     displayScore(users)
-    var begin = document.getElementById('begin')
     begin.style.visibility = 'visible'
   })
 
@@ -65,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
       gameDiv.innerHTML = `${startTimer}`
       if (startTimer == 0) {
         start = true
-        begin.style.visibility = 'hidden'
         startGameTimer()
         displayDirection(data.key)
         clearInterval(startInterval)
