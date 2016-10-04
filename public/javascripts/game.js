@@ -7,6 +7,7 @@ var gameTimer = 30
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
   var directionOutput = document.getElementById('direction')
+  var initialClasses = directionOutput.className
   var upArrow = document.getElementById('up').firstChild
   var downArrow = document.getElementById('down').firstChild
   var leftArrow = document.getElementById('left').firstChild
@@ -116,7 +117,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         break;
       default:
     }
-    directionOutput.innerHTML = direction
+    directionOutput.innerHTML = direction.toUpperCase()
+    directionOutput.classList.add(`grow`)
     answer = direction
   }
 
@@ -142,8 +144,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var gameInterval;
     gameInterval = setInterval(function(){
       $gameTimer.innerHTML = `${gameTimer}`
-      if (gameTimer == 0) {
+      if (gameTimer < 6) {
+        $gameTimer.classList.add('growTimer')
+      }
+      if (gameTimer === 0) {
         start = false
+        $gameTimer.classList.remove('growTimer')
         socket.emit('end', room)
         clearInterval(gameInterval)
       }

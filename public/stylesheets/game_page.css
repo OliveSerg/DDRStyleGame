@@ -29,6 +29,14 @@ button {
   width: 100%;
 }
 
+#timer {
+  margin-top: 0;
+  text-align: center;
+  height: 50px;
+  font-weight: bold;
+  font-size: 50px;
+}
+
 #game {
   position: relative;
 }
@@ -38,6 +46,13 @@ button {
   height: 152px;
 }
 
+#direction {
+  font-weight: bold;
+  font-size: -webkit-xxx-large;
+  text-align: center;
+  padding-top: 50px;
+}
+
 @keyframes grow {
   50% {transform: scale(1.2);}
 }
@@ -45,6 +60,20 @@ button {
 .animate {
   content: url('/images/UpON.png');
   animation: grow 1s infinite;
+  transform-origin: center;
+}
+
+.grow {
+  animation: grow 1s infinite alternate ease;
+  transform-origin: center;
+}
+
+@keyframes growTimer {
+  50% {transform: scale(1.5);}
+}
+
+.growTimer {
+  animation: growTimer 1s infinite ease;
   transform-origin: center;
 }
 
