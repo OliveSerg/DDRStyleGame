@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:3000')
+var socket = io.connect('http://192.168.2.52:3000')
 var room = window.location.pathname.replace('/game/', '')
 var start = false
 var answer, response;
@@ -6,6 +6,8 @@ var gameTimer = 30
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
+  var gameContainer = document.getElementById('game-container')
+  var resultsContainer = document.getElementById('results')
   var directionOutput = document.getElementById('direction')
   var initialClasses = directionOutput.className
   var upArrow = document.getElementById('up').firstChild
@@ -20,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   roomId.innerHTML = `Your Room Id is ${room}`
   begin.style.visibility = 'hidden'
   gameDiv.style.visibility = 'hidden'
+  results.style.visibility = 'hidden'
 
   document.getElementById('begin-button').addEventListener('click', function(ev){
     ev.preventDefault()
@@ -91,9 +94,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   socket.on('results', function(data){
     if(data.id.replace('/#',"") == socket.id){
-      winner()
+      displayResults('You Win!!')
     }else {
-      loser()
+      displayResults('You Lose')
     }
   })
 
@@ -119,6 +122,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     directionOutput.innerHTML = direction.toUpperCase()
     directionOutput.classList.add(`grow`)
+    setTimeout(function(){
+      directionOutput.classList.remove('grow')
+    }, 1000)
     answer = direction
   }
 
@@ -157,11 +163,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }, 1000)
   }
 
-  function winner(){
-    console.log('winner')
-  }
-
-  function loser(){
-    console.log('loser')
+  function displayResults(result) {
+    gameContainer.style.visibility = 'hidden'
+    gameDiv.style.visibility = 'hidden'
+    document.getElementById('result').innerHTML = result
+    results.style.visibility = 'visible'
   }
 })
