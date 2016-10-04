@@ -6,6 +6,11 @@ var gameTimer = 30
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var gameDiv = document.getElementById('game')
+  var directionOutput = document.getElementById('direction')
+  var upArrow = document.getElementById('up').firstChild
+  var downArrow = document.getElementById('down').firstChild
+  var leftArrow = document.getElementById('left').firstChild
+  var rightArrow = document.getElementById('right').firstChild
   var score = document.getElementById('score')
   var $gameTimer = document.getElementById('timer')
   var roomId = document.getElementById('room-id')
@@ -13,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   roomId.innerHTML = `Your Room Id is ${room}`
   begin.style.visibility = 'hidden'
-  // gameDiv.style.visibility = 'hidden'
+  gameDiv.style.visibility = 'hidden'
 
   document.getElementById('begin-button').addEventListener('click', function(ev){
     ev.preventDefault()
@@ -22,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   document.addEventListener('keydown', function(ev){
+    ev.preventDefault()
     switch (ev.keyCode) {
       case 40:
       case 83:
@@ -63,10 +69,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
   socket.on('start', function(data){
     var startTimer = 3;
     var startInterval = setInterval(function(){
-      gameDiv.innerHTML = `${startTimer}`
+      $gameTimer.innerHTML = `${startTimer}`
       if (startTimer == 0) {
         start = true
         startGameTimer()
+        gameDiv.style.visibility = 'visible'
         displayDirection(data.key)
         clearInterval(startInterval)
       }
@@ -82,8 +89,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   socket.on('results', function(data){
-    console.log(data);
-    console.log(socket.id);
     if(data.id.replace('/#',"") == socket.id){
       winner()
     }else {
@@ -92,8 +97,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
   })
 
   function displayDirection(direction){
-    gameDiv.innerHTML = ""
-    gameDiv.innerHTML = direction
+    upArrow.className = ""
+    downArrow.className = ""
+    leftArrow.className = ""
+    rightArrow.className = ""
+    switch (direction) {
+      case 'up':
+        upArrow.className = "animate"
+        break;
+      case 'down':
+        downArrow.className = "animate"
+        break;
+      case 'left':
+        leftArrow.className = "animate"
+        break;
+      case 'right':
+        rightArrow.className = "animate"
+        break;
+      default:
+    }
+    directionOutput.innerHTML = direction
     answer = direction
   }
 
