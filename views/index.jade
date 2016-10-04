@@ -1,17 +1,22 @@
 extends layout
 
+block mainHeader
+  link(rel='stylesheet', href='/stylesheets/main_menu.css')
+  script(type='text/javascript', src='/javascripts/main.js')
 block content
 
   div(
-    id='button-container'
+    class='container row'
   )
     button(
       type='button'
       id='create-room'
+      class='red darken-3 col s8 offset-s2 flow-text'
     ) Create Room
     button(
       type='button'
       id='join-button'
+      class='blue darken-3 col s8 offset-s2 flow-text'
     ) Join Room
 
   div(

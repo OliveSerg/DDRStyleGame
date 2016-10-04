@@ -1,0 +1,104 @@
+button {
+  background-color: transparent;
+  border: none;
+}
+
+#game-container{
+  position: relative;
+  height: 500px
+}
+
+#room-id {
+  background: red;
+  color: white;
+  margin: 0;
+  height: 40px;
+  padding: 11px;
+  font-weight: bold;
+}
+
+#score {
+  border-right: 2px solid grey;
+}
+
+#begin-button {
+  font-weight: bold;
+  font-size: -webkit-xxx-large;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+#timer {
+  margin-top: 0;
+  text-align: center;
+  height: 50px;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+#game {
+  position: relative;
+}
+
+.direction {
+  margin-top: 10px;
+  height: 152px;
+}
+
+#direction {
+  font-weight: bold;
+  font-size: -webkit-xxx-large;
+  text-align: center;
+  padding-top: 50px;
+}
+
+@keyframes grow {
+  50% {transform: scale(1.2);}
+}
+
+.animate {
+  content: url('/images/UpON.png');
+  animation: grow 1s infinite;
+  transform-origin: center;
+}
+
+.grow {
+  animation: grow 1s infinite ease-in;
+  transform-origin: center;
+}
+
+@keyframes growTimer {
+  50% {transform: scale(1.5);}
+}
+
+.growTimer {
+  animation: growTimer 1s infinite ease;
+  transform-origin: center;
+}
+
+#right{
+  transform: rotate(90deg);
+}
+
+#down{
+  transform: rotate(180deg);
+}
+
+#left{
+  transform: rotate(270deg);
+}
+
+#results {
+  position: absolute;
+  height: 500px;
+  width: 500px;
+}
+
+#result {
+  text-align: center;
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 700%;
+  padding-top: 25%
+}
