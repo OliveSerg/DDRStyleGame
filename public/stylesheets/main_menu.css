@@ -8,6 +8,10 @@
   /*font-size: 200%;*/
 }
 
+#title {
+  margin-top: 10px;
+}
+
 button {
   color: white;
 }

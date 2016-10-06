@@ -5,6 +5,19 @@ block mainHeader
   script(type='text/javascript', src='/javascripts/main.js')
 block content
 
+  nav(
+    class='nav row'
+  )
+    h2(
+      id='title'
+      class='col s4 offset-s4'
+    ) Directional
+    a(
+      id='login'
+      class='col s1 offset-s2'
+      href='/login'
+    )
+
   div(
     class='container row'
   )
